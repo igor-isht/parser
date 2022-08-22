@@ -11,7 +11,7 @@ load_dotenv()
 TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN')
 TELEGRAM_CHAT_ID = os.getenv('TELEGRAM_CHAT_ID')
 
-URL = 'https://www.avito.ru/moskva/noutbuki?cd=1&q=macbook+air+m1&user=1'
+URL = 'https://www.avito.ru/moskva/noutbuki?cd=1&q=macbook+air+m1&s=104&user=1'
 PRICE = 65000  # цена, не больше этой
 TIME = 60  # время между проверками, минут
 
@@ -41,9 +41,12 @@ def get_data(url):
         price_item = int(price_item)
         if price_item <= PRICE:
             url = 'https://www.avito.ru/' + item.find(class_='iva-item-sliderLink-uLz1v').get("href")
-            description = item.find(
-                class_='iva-item-text-Ge6dR iva-item-description-FDgK4 text-text-LurtD text-size-s-BxGpL'
-            ).text
+            try:
+                description = item.find(
+                    class_='iva-item-text-Ge6dR iva-item-description-FDgK4 text-text-LurtD text-size-s-BxGpL'
+                ).text
+            except AttributeError:
+                description = 'Без описания'
             if url not in data:
                 new_data.append(
                     {
@@ -72,9 +75,9 @@ def send_message(bot, items):
 def main():
     while True:
         items = get_data(URL)
-        bot = telegram.Bot(token=TELEGRAM_TOKEN)
-        if items is not None:
-            send_message(bot, items)
+        # bot = telegram.Bot(token=TELEGRAM_TOKEN)
+        # if items is not None:
+        #     send_message(bot, items)
         print('Я работаю!')  # чтобы не паниковать при работе парсера)
         time.sleep(TIME*60)
 
