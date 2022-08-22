@@ -75,9 +75,9 @@ def send_message(bot, items):
 def main():
     while True:
         items = get_data(URL)
-        # bot = telegram.Bot(token=TELEGRAM_TOKEN)
-        # if items is not None:
-        #     send_message(bot, items)
+        bot = telegram.Bot(token=TELEGRAM_TOKEN)
+        if items is not None:
+            send_message(bot, items)
         print('Я работаю!')  # чтобы не паниковать при работе парсера)
         time.sleep(TIME*60)
 
