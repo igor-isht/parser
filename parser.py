@@ -33,7 +33,7 @@ def get_data(url, price):
     except Exception as error:
         print(f'Возникла ошибка: {error}')
     new_data = []
-    new_data_base = []
+    new_data_base = ''
 
     for item in scr_list:
         price_item = item.find(class_='price-price-JP7qe').find('meta', attrs={"itemprop": "price"}).get('content')
@@ -54,16 +54,12 @@ def get_data(url, price):
                         "description": description.replace('\n', ' ').encode().decode('utf-8')
                     }
                 )
-                new_data_base.append(
-                    {
-                        "url": url,
-                        "price": price_item,
-                    }
-                )
+                new_data_base += f'[{url}, {price_item}]\n'
 
     if new_data:
         with open('data.txt', 'a', encoding='utf-8') as file:
-            for data in new_data_base:
-                file.write(str(data) + '\n')
+            # for data in new_data_base:
+            #     file.write(str(data) + '\n')
+            file.write(new_data_base)
         return new_data
     return None
